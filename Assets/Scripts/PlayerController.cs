@@ -6,19 +6,24 @@ public class PlayerController : MonoBehaviour
 {
     public static PlayerController instance;
 
-    public float damage;
-    public float attackDelay;
-    public float currentAttackDelay;
-    public float moveSpeed;
-    public Vector3 direction = Vector3.zero;
+    [SerializeField] private float damage;
+    [SerializeField] private float attackDelay;
+    [SerializeField] private float currentAttackDelay;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private LayerMask layer;
+    [SerializeField] private Transform playerCharacter;
+    private string animName;
+    public Vector3 direction;
 
     public Animator anim;
+    private Transform camTransform;
 
     public GameState<PlayerController> currentState;
+
     public Enemy currentEnemy;
 
-    public PlayerMoveState playerMoveState;
-    public PlayerBattleState playerBattleState;
+    private PlayerMoveState playerMoveState;
+    private PlayerBattleState playerBattleState;
 
     private void Awake()
     {
@@ -39,10 +44,18 @@ public class PlayerController : MonoBehaviour
         currentState.StateUpdate(this);
         StateChoice();
         AttackDelay();
+        CanvasMove();
+    }
+
+    private void CanvasMove()
+    {
+        playerCharacter.LookAt(transform.position + camTransform.rotation * Vector3.forward, camTransform.rotation * Vector3.up);
     }
 
     private void Init()
     {
+        camTransform = Camera.main.transform;
+
         playerMoveState = new PlayerMoveState();
         playerBattleState = new PlayerBattleState();
         currentState = playerMoveState;
@@ -55,7 +68,7 @@ public class PlayerController : MonoBehaviour
 
     public void StateChoice()
     {
-        if(Vector3.Distance(this.transform.position, currentEnemy.transform.position) <= 1f)
+        if(Physics.Raycast(transform.position, Vector3.forward, 1f, layer))
         {
             if (currentState.GetType() != typeof(PlayerBattleState)) SetState(playerBattleState);
         }
@@ -77,19 +90,19 @@ public class PlayerController : MonoBehaviour
 
     public void Attack()
     {
-        
-
         if (currentAttackDelay <= 0)
         {
-            anim.SetTrigger("Attack");
+            anim.SetBool("isMove", false);
+            if (!anim.GetCurrentAnimatorStateInfo(0).IsName("isBattle")) anim.SetBool("isBattle", true);
             currentAttackDelay = attackDelay;
         }
     }
 
     public void Move()
     {
-        direction = currentEnemy.transform.position - this.transform.position;
-
-        transform.position += direction * 2 * Time.deltaTime;
+        Debug.Log("Move!");
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("isBattle")) anim.SetBool("isBattle", false);
+        if (!anim.GetCurrentAnimatorStateInfo(0).IsName("isMove")) anim.SetBool("isMove", true);
+        transform.position += direction * moveSpeed * Time.deltaTime;
     }
 }

@@ -13,7 +13,7 @@ public class PlayerMoveState : GameState<PlayerController>
 
     public override void StateEnter(PlayerController Controller)
     {
-        
+        Debug.Log("MoveStateEnter");
     }
 
     public override void StateUpdate(PlayerController Controller)
@@ -23,7 +23,7 @@ public class PlayerMoveState : GameState<PlayerController>
 
     public override void StateExit(PlayerController Controller)
     {
-        
+        Debug.Log("MoveStateExit");
     }
 
 }
@@ -39,7 +39,7 @@ public class PlayerBattleState : GameState<PlayerController>
 
     public override void StateEnter(PlayerController Controller)
     {
-        
+        Debug.Log("BattleStateEnter");
     }
 
     public override void StateUpdate(PlayerController Controller)
@@ -49,6 +49,6 @@ public class PlayerBattleState : GameState<PlayerController>
 
     public override void StateExit(PlayerController Controller)
     {
-        
+        Debug.Log("BattleStateExit");
     }
 }
