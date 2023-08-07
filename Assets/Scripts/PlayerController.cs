@@ -98,6 +98,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void IdleDamage()
+    {
+        currentEnemy.Hit(damage);
+    }
+
     public void Move()
     {
         Debug.Log("Move!");

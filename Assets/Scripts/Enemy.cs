@@ -34,6 +34,7 @@ public class Enemy : MonoBehaviour
     protected virtual void Init()
     {
         camTransform = Camera.main.transform;
+        currentHp = maxHp;
     }
 
     protected virtual void CanvasMove()
@@ -46,8 +47,14 @@ public class Enemy : MonoBehaviour
         
     }
 
+    public virtual void Hit(float damage)
+    {
+        currentHp -= damage;
+        if (currentHp <= 0) Die();
+    }
+
     public virtual void Die()
     {
-
+        Destroy(gameObject);
     }
 }

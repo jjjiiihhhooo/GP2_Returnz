@@ -21,7 +21,7 @@ public class Normal_Enemy : Enemy
 
     protected override void Init()
     {
-        camTransform = Camera.main.transform;
+        base.Init();
     }
 
     protected override void CanvasMove()
