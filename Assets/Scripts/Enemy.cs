@@ -55,6 +55,7 @@ public class Enemy : MonoBehaviour
 
     public virtual void Die()
     {
+        GameManager.instance.ChangeField();
         Destroy(gameObject);
     }
 }
